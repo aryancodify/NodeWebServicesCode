@@ -6,14 +6,18 @@ var port = process.env.PORT || 3000;
 
 var bookRouter = express.Router();
 
-bookRouter.route('Books');
+app.use('/api', bookRouter);
 
-app.use('/api',router);
+bookRouter.route('/Books')
+	.get(function(req, res) {
+		var responseJson = {'hello':'Welcome to the API'};
+		res.json(responseJson);
+	});
 
-app.get('/',function(req,res){
+app.get('/', function(req, res) {
 	res.send('Welcome to my API !');
 });
 
-app.listen(port,function(){
+app.listen(port, function() {
 	console.log('Gulp running my app on the port ' + port);
 });
