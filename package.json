@@ -1,0 +1,28 @@
+{
+  "name": "node_webservices_code",
+  "version": "1.0.0",
+  "description": "Simple Web Services CRUD demo with node",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aryansinghies/NodeWebServicesCode.git"
+  },
+  "keywords": [
+    "Web",
+    "Services",
+    "with",
+    "node"
+  ],
+  "author": "Aryan Singh <aryan_singh1993@yahoo.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3",
+    "git": "^0.1.5",
+    "gulp": "^3.9.0",
+    "gulp-nodemon": "^2.0.4",
+    "nodemon": "^1.4.1"
+  }
+}
