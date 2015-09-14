@@ -1,9 +1,12 @@
 //json object that lays out how the book will look like
 var mongoose = require('mongoose'),
-	schema = mongoose.Schema();
+	Schema = mongoose.Schema;
 
 var bookModel = new Schema({
 	title:{
+		type:String
+	},
+	genre:{
 		type:String
 	},
 	author:{

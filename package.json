@@ -19,6 +19,7 @@
   "author": "Aryan Singh <aryan_singh1993@yahoo.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "git": "^0.1.5",
     "gulp": "^3.9.0",
