@@ -1,5 +1,6 @@
 var express = require('express')
-	bodyParser = require('body-parser');
+bodyParser = require('body-parser'),
+Book = require('./models/bookModel');
 
 var db = require('./db');
 
@@ -12,9 +13,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-bookRouter = require('./Routes/bookRoutes')();
+bookRouter = require('./Routes/bookRoutes')(Book);
 
-app.use('/api', bookRouter);
+app.use('/api/books', bookRouter);
 
 
 app.get('/', function(req, res) {

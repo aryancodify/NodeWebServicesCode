@@ -1,42 +1,95 @@
 var express = require('express');
 var db = require('../db');
-var Book = require('../models/bookModel');
-var routes = function(){
+
+var routes = function(Book) {
 	var bookRouter = express.Router();
-	bookRouter.route('/books')
-	.post(function(req, res) {
-		var book = new Book(req.body);
-		book.save(function(err, bookk) {
+
+	bookRouter.route('/')
+		.post(function(req, res) {
+			var book = new Book(req.body);
+			saveBook(book, function(err, book) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.status(201).send(book);
+				}
+			});
+		})
+		.get(function(req, res) {
+			var query = {};
+			if (req.query.genre) {
+				query.genre = decodeURI(req.query.genre);
+			}
+			Book.find(query, function(err, books) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					res.json(books);
+				}
+			});
+		});
+
+	bookRouter.use('/:bookId', function(req, res, next) {
+		Book.findById(req.params.bookId, function(err, book) {
+			if (err) {
+				res.status(500).send(err);
+			} else if (book) {
+				req.book = book;
+				next();
+			} else {
+				res.status(404).send('Book Not Found !');
+			}
+		});
+	});
+
+	bookRouter.route('/:bookId').get(function(req, res) {
+		res.send(req.book);
+	}).
+	put(function(req, res) {
+		req.book.title = req.body.title;
+		req.book.genre = req.body.genre;
+		req.book.read = req.body.read;
+		req.book.author = req.body.author;
+		saveBook(req.book, function(err, book) {
 			if (err) {
 				res.status(500).send(err);
 			} else {
 				res.status(201).send(book);
 			}
 		});
-	})
-	.get(function(req, res) {
-		var query = {};
-		if (req.query.genre) {
-			query.genre = decodeURI(req.query.genre);
+	}).patch(function(req, res) {
+		if (req.body._id) {
+			delete req.body._id;
 		}
-		Book.find(query, function(err, books) {
+		for (var attr in req.body) {
+			req.book[attr] = req.body[attr];
+		}
+		saveBook(req.book, function(err, book) {
 			if (err) {
 				res.status(500).send(err);
 			} else {
-				console.log(books);
-				res.json(books);
+				res.status(201).send(book);
+			}
+		});
+	}).delete(function(req, res) {
+		req.book.remove(function(err) {
+			if (err) {
+				res.status(500).send(err);
+			} else {
+				res.status(204).send('Removed that book');
 			}
 		});
 	});
-bookRouter.route('/books/:bookId').get(function(req, res) {
-	Book.findById(req.params.bookId, function(err, book) {
+	return bookRouter;
+}
+
+function saveBook(book, bookSaved) {
+	book.save(function(err, book) {
 		if (err) {
-			res.status(500).send(err);
+			bookSaved(err, null);
 		} else {
-			res.json(book);
+			bookSaved(null, book);
 		}
 	});
-});
-return bookRouter;
-};
+}
 module.exports = routes;
