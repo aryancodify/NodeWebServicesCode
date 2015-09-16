@@ -4,17 +4,9 @@ var db = require('../db');
 var routes = function(Book) {
 	var bookRouter = express.Router();
 
+	var bookController = require('../Controllers/bookController')(Book);
 	bookRouter.route('/')
-		.post(function(req, res) {
-			var book = new Book(req.body);
-			saveBook(book, function(err, book) {
-				if (err) {
-					res.status(500).send(err);
-				} else {
-					res.status(201).send(book);
-				}
-			});
-		})
+		.post(bookController.post)
 		.get(function(req, res) {
 			var query = {};
 			if (req.query.genre) {
