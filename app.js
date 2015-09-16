@@ -27,3 +27,5 @@ app.get('/', function(req, res) {
 app.listen(port, function() {
 	console.log('Gulp running my app on the port ' + port);
 });
+
+module.exports = app;
